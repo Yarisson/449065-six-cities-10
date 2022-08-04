@@ -2,15 +2,27 @@ import { useParams } from 'react-router-dom';
 import FormComment from '../../components/formComment/formComment';
 import Header from '../../components/header/header';
 import PlaceList from '../../components/placeList/placeList';
+import ReviewList from '../../components/reviewList/reviewList';
+import Map from '../../components/map/map';
 import { Offer } from '../../types/offer';
+import { ReviewType } from '../../types/reviewType';
+import { City } from '../../types/city';
+import { Location } from '../../types/offer';
 
 type HotelProps = {
   offers: Offer[],
+  reviews: ReviewType[],
+  city: City,
+  nearPlaces: Location[],
 }
 
-function Hotel({offers}: HotelProps): JSX.Element {
+function Hotel({offers, reviews, city, nearPlaces}: HotelProps): JSX.Element {
   const params = useParams();
   const {id} = params;
+  const width = '90%';
+  const height = '578px';
+  // const points = nearPlaces.map((item) => item.location);
+  const zoom = 13;
 
   const currentOffer = offers.find((item) => item.id === Number(id));
 
@@ -157,45 +169,17 @@ function Hotel({offers}: HotelProps): JSX.Element {
               </div>
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">
-                  Reviews &middot; <span className="reviews__amount">1</span>
+                  Reviews &middot; <span className="reviews__amount">{reviews.length}</span>
                 </h2>
-                <ul className="reviews__list">
-                  <li className="reviews__item">
-                    <div className="reviews__user user">
-                      <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                        <img
-                          className="reviews__avatar user__avatar"
-                          src="img/avatar-max.jpg"
-                          width="54"
-                          height="54"
-                          alt="Reviews avatar"
-                        />
-                      </div>
-                      <span className="reviews__user-name">Max</span>
-                    </div>
-                    <div className="reviews__info">
-                      <div className="reviews__rating rating">
-                        <div className="reviews__stars rating__stars">
-                          <span style={{ width: '80%' }}></span>
-                          <span className="visually-hidden">Rating</span>
-                        </div>
-                      </div>
-                      <p className="reviews__text">
-                        A quiet cozy and picturesque that hides behind a a river
-                        by the unique lightness of Amsterdam. The building is
-                        green and from 18th century.
-                      </p>
-                      <time className="reviews__time" dateTime="2019-04-24">
-                        April 2019
-                      </time>
-                    </div>
-                  </li>
-                </ul>
+                <ReviewList reviews={reviews} />
                 <FormComment/>
               </section>
             </div>
           </div>
-          <section className="property__map map"></section>
+          <section className="property__map map">
+            <Map zoom={zoom} center={city.location} points={nearPlaces} width={width} height={height} />
+            {/*  */}
+          </section>
         </section>
         <div className="container">
           <section className="near-places places">

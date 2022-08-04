@@ -2,13 +2,15 @@ import leaflet from 'leaflet';
 import { Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useRef, useEffect } from 'react';
-import { Offer } from '../../types/offer';
-import { City } from '../../types/city';
+import { Location } from '../../types/offer';
 import useMap from '../../hooks/useMap';
 
 type MapProps = {
-  offers: Offer[],
-  city: City,
+  zoom: number,
+  center: Location,
+  points: Location[]
+  width: string,
+  height: string,
 };
 
 const icon = leaflet.icon({
@@ -24,11 +26,9 @@ const icon = leaflet.icon({
 //   iconAnchor: [20, 40]
 // });
 
-function Map({offers, city}: MapProps): JSX.Element {
+function Map({points, zoom, center, width, height}: MapProps): JSX.Element {
   const mapRef = useRef(null);
-  const map = useMap(mapRef, city);
-
-  const points = offers.map((item) => item.location);
+  const map = useMap(mapRef, center, zoom);
 
   useEffect(() => {
     if (map) {
@@ -44,9 +44,8 @@ function Map({offers, city}: MapProps): JSX.Element {
       });
     }
   }, [map, points]);
-
   return (
-    <div style={{width: '512px', height: '849px'}} ref={mapRef} id="map">
+    <div style={{width: `${width}`, height: `${height}`}} ref={mapRef} id="map">
     </div>
   );
 }

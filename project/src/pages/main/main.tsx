@@ -11,6 +11,11 @@ type MainProps = {
 }
 
 function Main({offers, city}: MainProps): JSX.Element {
+  const width = '512px';
+  const height = '849px';
+  const points = offers.map((item) => item.location);
+  const zoom = 10;
+
   return (
     <section>
       <div style={{display: 'none'}}>
@@ -100,7 +105,7 @@ function Main({offers, city}: MainProps): JSX.Element {
               </section>
               <div className="cities__right-section">
                 <section className="cities__map map">
-                  <Map offers={offers} city={city} />
+                  <Map zoom={zoom} center={city.location} points={points} width={width} height={height}/>
                 </section>
               </div>
             </div>
