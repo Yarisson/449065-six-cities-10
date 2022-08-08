@@ -34,7 +34,7 @@ function Main({offers}: MainProps): JSX.Element {
 
   const onChangeTab = (city: City) => {
     setCurrentCity(city);
-    dispatch(changeOffers({ offers }));
+    dispatch(changeOffers(offers));
     setCurrentCityOffers(offers.filter((item) => item.city === city.name));
   };
 

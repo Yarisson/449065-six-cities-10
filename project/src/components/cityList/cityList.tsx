@@ -25,7 +25,7 @@ function CityList({cities, onChangeTab}: CityListProps): JSX.Element {
             <Link className={cn('locations__item-link tabs__item', {'tabs__item--active': activeCity.name === city.name})}
               to={'/'}
               onClick={() => {
-                dispatch(changeCurrentCity({city}));
+                dispatch(changeCurrentCity(city));
                 setActiveCity(city);
                 onChangeTab(city);
               }}
