@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 import App from './components/app/app';
-import offers from './mocks/offers';
-import city from './mocks/city';
+import { store } from './store';
 import reviews from './mocks/reviews';
 import nearPlaces from './mocks/nearPlaces';
 
@@ -12,6 +12,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App offers={offers} city={city} reviews={reviews} nearPlaces={nearPlaces} />
+    <Provider store={store}>
+      <App nearPlaces={nearPlaces} reviews={reviews} />
+    </Provider>
   </React.StrictMode>,
 );

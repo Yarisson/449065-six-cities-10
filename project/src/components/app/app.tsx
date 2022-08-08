@@ -1,4 +1,5 @@
 import {Route, BrowserRouter, Routes} from 'react-router-dom';
+import { useAppSelector } from '../../hooks';
 import {AppRoute, AuthorizationStatus} from '../../const';
 import NotFound from '../../pages/404/notFound';
 import Favorites from '../../pages/favorites/favorites';
@@ -6,24 +7,23 @@ import Login from '../../pages/login/login';
 import Main from '../../pages/main/main';
 import Hotel from '../../pages/hotel/hotel';
 import PrivateRoute from '../private-route/privateRoute';
-import { Offer, Location } from '../../types/offer';
-import { City } from '../../types/city';
+import { Location } from '../../types/offer';
 import { ReviewType } from '../../types/reviewType';
 
 type AppProps = {
-  offers: Offer[],
-  city: City,
   reviews: ReviewType[],
   nearPlaces: Location[],
 }
 
-function App({offers, city, reviews, nearPlaces}: AppProps): JSX.Element {
+function App({reviews, nearPlaces}: AppProps): JSX.Element {
+  const offers = useAppSelector((state) => state.offers);
+
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path={'/'}
-          element={<Main offers={offers} city={city} />}
+          element={<Main offers={offers}/>}
         />
         <Route
           path={AppRoute.Favorites}
@@ -41,7 +41,7 @@ function App({offers, city, reviews, nearPlaces}: AppProps): JSX.Element {
         />
         <Route
           path={`${AppRoute.Room}/:id`}
-          element={<Hotel offers={offers} city={city} reviews={reviews} nearPlaces={nearPlaces} />}
+          element={<Hotel offers={offers} reviews={reviews} nearPlaces={nearPlaces} />}
         />
         <Route
           path={'*'}
