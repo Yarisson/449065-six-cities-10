@@ -1,5 +1,6 @@
 import {Route, BrowserRouter, Routes} from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
+import { useAppSelector, useAppDispatch } from '../../hooks';
+import { getOffers } from '../../store/action';
 import {AppRoute, AuthorizationStatus} from '../../const';
 import NotFound from '../../pages/404/notFound';
 import Favorites from '../../pages/favorites/favorites';
@@ -16,6 +17,8 @@ type AppProps = {
 }
 
 function App({reviews, nearPlaces}: AppProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  dispatch(getOffers());
   const offers = useAppSelector((state) => state.offers);
 
   return (
