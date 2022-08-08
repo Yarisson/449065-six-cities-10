@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { changeOffers } from '../../store/action';
+import { changeOffers, sortLowPrice, sortHighPrice, sortRate } from '../../store/action';
 import PlaceList from '../../components/placeList/placeList';
 import Header from '../../components/header/header';
 import Map from '../../components/map/map';
@@ -39,6 +39,15 @@ function Main({offers}: MainProps): JSX.Element {
   };
 
   useEffect(() => {
+    if (isOpenFilter) {
+      if (currentFilter === FilterType[1]) {
+        dispatch(sortLowPrice());
+      } else if (currentFilter === FilterType[2]) {
+        dispatch(sortHighPrice());
+      } else if (currentFilter === FilterType[3]) {
+        dispatch(sortRate());
+      }
+    }
     setCurrentPoints(currentCityOffers.map((offer) => offer.location));
   }, [currentCityOffers]);
 
@@ -111,6 +120,8 @@ function Main({offers}: MainProps): JSX.Element {
                         tabIndex={0}
                         onClick={() => {
                           setCurrentFilter(filterType);
+                          // eslint-disable-next-line no-console
+                          console.log(currentFilter);
                           setIsOpenFilter(false);
                         }}
                       >
