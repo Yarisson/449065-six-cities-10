@@ -35,7 +35,11 @@ function Main({offers}: MainProps): JSX.Element {
   const onChangeTab = (city: City) => {
     setCurrentCity(city);
     dispatch(changeOffers(offers));
-    setCurrentCityOffers(offers.filter((item) => item.city === city.name));
+    setCurrentCityOffers(offers.filter((item) => item.city === city.name).sort((a, b) => {
+      if (currentFilter === FilterType[1]) {
+        return a.price > b.price ? 1 : -1;
+      }
+    }));
   };
 
   const sortOffers = (array: Offer[], sortType: string) => {
