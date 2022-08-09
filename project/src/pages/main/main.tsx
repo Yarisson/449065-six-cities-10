@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { changeOffers, sortLowPrice, sortHighPrice, sortRate } from '../../store/action';
+import { changeOffers } from '../../store/action';
 import PlaceList from '../../components/placeList/placeList';
 import Header from '../../components/header/header';
 import Map from '../../components/map/map';
@@ -38,18 +38,45 @@ function Main({offers}: MainProps): JSX.Element {
     setCurrentCityOffers(offers.filter((item) => item.city === city.name));
   };
 
-  useEffect(() => {
-    if (isOpenFilter) {
-      if (currentFilter === FilterType[1]) {
-        dispatch(sortLowPrice());
-      } else if (currentFilter === FilterType[2]) {
-        dispatch(sortHighPrice());
-      } else if (currentFilter === FilterType[3]) {
-        dispatch(sortRate());
-      }
+  const sortOffers = (array: Offer[], sortType: string) => {
+    if (sortType === 'Price: low to high') {
+      array.sort((a, b) => {
+        if (a.price < b.price) {
+          return 1;
+        }
+        if (a.price > b.price) {
+          return -1;
+        }
+        return 0;
+      });
+    } else if (sortType === 'Price: high to low') {
+      array.sort((a, b) => {
+        if (a.price > b.price) {
+          return 1;
+        }
+        if (a.price < b.price) {
+          return -1;
+        }
+        return 0;
+      });
+    } else if (sortType === 'Top rated first') {
+      array.sort((a, b) => {
+        if (parseInt(a.stars, 10) > parseInt(b.stars, 10)) {
+          return 1;
+        }
+        if (parseInt(a.stars, 10) < parseInt(b.stars, 10)) {
+          return -1;
+        }
+        return 0;
+      });
     }
+  };
+
+  useEffect(() => {
     setCurrentPoints(currentCityOffers.map((offer) => offer.location));
-  }, [currentCityOffers]);
+    // setCurrentCityOffers(sortOffers(currentCityOffers, currentFilter));
+
+  }, [currentCityOffers, currentFilter]);
 
   const width = '512px';
   const height = '849px';
@@ -97,10 +124,15 @@ function Main({offers}: MainProps): JSX.Element {
                 <b className="places__found">
                   {currentCityOffers.length} places to stay in {currentCity.name}
                 </b>
-                <form className="places__sorting" action="#" method="get">
-                  <span className="places__sorting-caption">Sort by</span>
+                <form className="places__sorting" action="#" method="get" onClick={() => {
+                  setIsOpenFilter(!isOpenFilter);
+                }}
+                >
+                  <span className="places__sorting-caption">
+                    Sort by
+                  </span>
                   <span className="places__sorting-type" tabIndex={0}>
-                    Popular
+                    {currentFilter}
                     <svg className="places__sorting-arrow" width="7" height="4">
                       <use xlinkHref="#icon-arrow-select"></use>
                     </svg>
@@ -120,31 +152,12 @@ function Main({offers}: MainProps): JSX.Element {
                         tabIndex={0}
                         onClick={() => {
                           setCurrentFilter(filterType);
-                          // eslint-disable-next-line no-console
-                          console.log(currentFilter);
                           setIsOpenFilter(false);
                         }}
                       >
                         {filterType}
                       </li>
                     ))}
-                  </ul>
-                  <ul className="places__options places__options--custom places__options--opened">
-                    <li
-                      className="places__option places__option--active"
-                      tabIndex={0}
-                    >
-                      Popular
-                    </li>
-                    <li className="places__option" tabIndex={0}>
-                      Price: low to high
-                    </li>
-                    <li className="places__option" tabIndex={0}>
-                      Price: high to low
-                    </li>
-                    <li className="places__option" tabIndex={0}>
-                      Top rated first
-                    </li>
                   </ul>
                 </form>
                 <PlaceList offers={currentCityOffers} />
