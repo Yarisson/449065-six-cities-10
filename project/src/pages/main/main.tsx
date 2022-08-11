@@ -1,13 +1,13 @@
-import cn from 'classnames';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { changeOffers } from '../../store/action';
+import { useAppSelector } from '../../hooks';
+// import { changeOffers } from '../../store/action';
 import PlaceList from '../../components/placeList/placeList';
 import Header from '../../components/header/header';
 import Map from '../../components/map/map';
 import { City } from '../../types/city';
 import { Offer } from '../../types/offer';
 import CityList from '../../components/cityList/cityList';
-import { useState, useEffect } from 'react';
+import SortList from '../../components/sortList/sortList';
+import { useState } from 'react';
 import cities from '../../mocks/cities';
 import FilterType from '../../mocks/filterTypes';
 
@@ -16,71 +16,79 @@ type MainProps = {
 }
 
 function Main({offers}: MainProps): JSX.Element {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
-  const [currentCity, setCurrentCity] = useState(
-    useAppSelector((state) => state.city)
-  );
-  const [currentCityOffers, setCurrentCityOffers] = useState(
-    useAppSelector((state) => state.offers).filter(
-      (offer) => offer.city === currentCity.name
-    )
-  );
-  const [currentPoints, setCurrentPoints] = useState(
-    currentCityOffers.map((offer) => offer.location)
-  );
-  const [currentFilter, setCurrentFilter] = useState(FilterType[0]);
+  // const [currentCity, setCurrentCity] = useState(
+  //   useAppSelector((state) => state.city)
+  // );
+
+  const currentCity = useAppSelector((state) => state.city);
+  // const [currentCityOffers, setCurrentCityOffers] = useState(
+  //   useAppSelector((state) => state.offers).filter(
+  //     (offer) => offer.city === currentCity.name
+  //   )
+  // );
+  const currentFilter = useAppSelector((state) => state.currentFilter);
   const [isOpenFilter, setIsOpenFilter] = useState(false);
 
+  const toggleFilter = () => {
+    setIsOpenFilter(false);
+  };
+
+  const currentCityOffers = offers.filter((item) => item.city === currentCity.name);
+
+  // const currentCityOffers = offers.filter((item) => item.city === currentCity.name).sort((a, b) => {
+  //   if (currentFilter === 'Price: low to high') {
+  //     if (a.price < b.price) {
+  //       return 1;
+  //       return (a.price - b.price);
+  //     }
+  //     if (a.price > b.price) {
+  //       return -1;
+  //       return b.price - a.price;
+  //     }
+  //     return 0;
+  //   } else if (currentFilter === 'Price: high to low') {
+  //     if (a.price > b.price) {
+  //       return a.price - b.price;
+  //       return 1;
+  //     }
+  //     if (a.price < b.price) {
+  //       return -1;
+  //       return b.price - a.price;
+  //     }
+  //     return 0;
+  //   } else if (currentFilter === 'Top rated first') {
+  //     if (parseInt(a.stars, 10) > parseInt(b.stars, 10)) {
+  //       return 1;
+  //       return parseInt(a.stars, 10) - parseInt(b.stars, 10);
+  //     }
+  //     if (parseInt(a.stars, 10) < parseInt(b.stars, 10)) {
+  //       return parseInt(b.stars, 10) - parseInt(a.stars, 10);
+  //       return -1;
+  //     }
+  //     return 0;
+  //   }
+  // });
+
+  const currentPoints = useState(currentCityOffers.map((offer) => offer.location));
+
+  // const [currentPoints, setCurrentPoints] = useState(
+  //   currentCityOffers.map((offer) => offer.location)
+  // );
+
+
   const onChangeTab = (city: City) => {
-    setCurrentCity(city);
-    dispatch(changeOffers(offers));
-    setCurrentCityOffers(offers.filter((item) => item.city === city.name).sort((a, b) => {
-      if (currentFilter === FilterType[1]) {
-        return a.price > b.price ? 1 : -1;
-      }
-    }));
+    // setCurrentCity(city);
+    // dispatch(changeOffers(offers));
+    // setCurrentCityOffers(offers.filter((item) => item.city === city.name));
   };
 
-  const sortOffers = (array: Offer[], sortType: string) => {
-    if (sortType === 'Price: low to high') {
-      array.sort((a, b) => {
-        if (a.price < b.price) {
-          return 1;
-        }
-        if (a.price > b.price) {
-          return -1;
-        }
-        return 0;
-      });
-    } else if (sortType === 'Price: high to low') {
-      array.sort((a, b) => {
-        if (a.price > b.price) {
-          return 1;
-        }
-        if (a.price < b.price) {
-          return -1;
-        }
-        return 0;
-      });
-    } else if (sortType === 'Top rated first') {
-      array.sort((a, b) => {
-        if (parseInt(a.stars, 10) > parseInt(b.stars, 10)) {
-          return 1;
-        }
-        if (parseInt(a.stars, 10) < parseInt(b.stars, 10)) {
-          return -1;
-        }
-        return 0;
-      });
-    }
-  };
+  // useEffect(() => {
+  //   setCurrentPoints(currentCityOffers.map((offer) => offer.location));
+  //   setCurrentCityOffers(sortOffers(currentCityOffers, currentFilter));
 
-  useEffect(() => {
-    setCurrentPoints(currentCityOffers.map((offer) => offer.location));
-    // setCurrentCityOffers(sortOffers(currentCityOffers, currentFilter));
-
-  }, [currentCityOffers, currentFilter]);
+  // }, [currentCityOffers]);
 
   const width = '512px';
   const height = '849px';
@@ -141,7 +149,8 @@ function Main({offers}: MainProps): JSX.Element {
                       <use xlinkHref="#icon-arrow-select"></use>
                     </svg>
                   </span>
-                  <ul
+                  <SortList isOpenFilter={isOpenFilter} currentFilter={currentFilter} filterTypes={FilterType} toggleFilter={toggleFilter} />
+                  {/* <ul
                     className={cn('places__options places__options--custom', {
                       'places__options--opened': isOpenFilter,
                     })}
@@ -162,7 +171,7 @@ function Main({offers}: MainProps): JSX.Element {
                         {filterType}
                       </li>
                     ))}
-                  </ul>
+                  </ul> */}
                 </form>
                 <PlaceList offers={currentCityOffers} />
               </section>
