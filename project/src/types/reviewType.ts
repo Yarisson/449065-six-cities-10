@@ -4,5 +4,5 @@ export interface ReviewType {
   name: string,
   text: string,
   date: string,
-  stars: string,
+  rating: string,
 }

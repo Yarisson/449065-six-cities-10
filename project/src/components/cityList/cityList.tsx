@@ -7,10 +7,9 @@ import { City } from '../../types/city';
 
 type CityListProps = {
   cities: City[],
-  onChangeTab: (city: City) => void,
 }
 
-function CityList({cities, onChangeTab}: CityListProps): JSX.Element {
+function CityList({cities}: CityListProps): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   // const [activeCity, setActiveCity] = useState(useAppSelector((state) => state.city));
@@ -28,7 +27,6 @@ function CityList({cities, onChangeTab}: CityListProps): JSX.Element {
               onClick={() => {
                 dispatch(changeCurrentCity(city));
                 // setActiveCity(city);
-                onChangeTab(city);
               }}
             >
               <span>{city.name}</span>

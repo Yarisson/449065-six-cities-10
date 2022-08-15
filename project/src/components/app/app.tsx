@@ -26,7 +26,7 @@ function App({reviews, nearPlaces}: AppProps): JSX.Element {
       <Routes>
         <Route
           path={'/'}
-          element={<Main offers={offers}/>}
+          element={<Main />}
         />
         <Route
           path={AppRoute.Favorites}

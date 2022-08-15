@@ -3,92 +3,46 @@ import { useAppSelector } from '../../hooks';
 import PlaceList from '../../components/placeList/placeList';
 import Header from '../../components/header/header';
 import Map from '../../components/map/map';
-import { City } from '../../types/city';
-import { Offer } from '../../types/offer';
 import CityList from '../../components/cityList/cityList';
 import SortList from '../../components/sortList/sortList';
 import { useState } from 'react';
 import cities from '../../mocks/cities';
 import FilterType from '../../mocks/filterTypes';
+import { State } from '../../types/state';
 
-type MainProps = {
-  offers: Offer[],
-}
+const citySelector = (state: State) => state.city;
+const filterSelector = (state: State) => state.currentFilter;
 
-function Main({offers}: MainProps): JSX.Element {
+const offersSelector = (state: State) => {
+  return state.offers.filter((offer) => offer.city === state.city.name)
+    .sort((a, b) => {
+      if (state.currentFilter === 'Price: low to high') {
+        b.price - a.price;
+      }
+
+      if (state.currentFilter === 'Price: high to low') {
+        return a.price - b.price;
+      }
+
+      if (state.currentFilter === 'Top rated first') {
+        return b.rating - a.rating;
+      }
+    });
+};
+
+function Main(): JSX.Element {
   // const dispatch = useAppDispatch();
 
-  // const [currentCity, setCurrentCity] = useState(
-  //   useAppSelector((state) => state.city)
-  // );
-
-  const currentCity = useAppSelector((state) => state.city);
-  // const [currentCityOffers, setCurrentCityOffers] = useState(
-  //   useAppSelector((state) => state.offers).filter(
-  //     (offer) => offer.city === currentCity.name
-  //   )
-  // );
-  const currentFilter = useAppSelector((state) => state.currentFilter);
+  const city = useAppSelector(citySelector);
+  const filter = useAppSelector(filterSelector);
   const [isOpenFilter, setIsOpenFilter] = useState(false);
+  const offers = useAppSelector(offersSelector);
 
   const toggleFilter = () => {
     setIsOpenFilter(false);
   };
 
-  const currentCityOffers = offers.filter((item) => item.city === currentCity.name);
-
-  // const currentCityOffers = offers.filter((item) => item.city === currentCity.name).sort((a, b) => {
-  //   if (currentFilter === 'Price: low to high') {
-  //     if (a.price < b.price) {
-  //       return 1;
-  //       return (a.price - b.price);
-  //     }
-  //     if (a.price > b.price) {
-  //       return -1;
-  //       return b.price - a.price;
-  //     }
-  //     return 0;
-  //   } else if (currentFilter === 'Price: high to low') {
-  //     if (a.price > b.price) {
-  //       return a.price - b.price;
-  //       return 1;
-  //     }
-  //     if (a.price < b.price) {
-  //       return -1;
-  //       return b.price - a.price;
-  //     }
-  //     return 0;
-  //   } else if (currentFilter === 'Top rated first') {
-  //     if (parseInt(a.stars, 10) > parseInt(b.stars, 10)) {
-  //       return 1;
-  //       return parseInt(a.stars, 10) - parseInt(b.stars, 10);
-  //     }
-  //     if (parseInt(a.stars, 10) < parseInt(b.stars, 10)) {
-  //       return parseInt(b.stars, 10) - parseInt(a.stars, 10);
-  //       return -1;
-  //     }
-  //     return 0;
-  //   }
-  // });
-
-  const currentPoints = useState(currentCityOffers.map((offer) => offer.location));
-
-  // const [currentPoints, setCurrentPoints] = useState(
-  //   currentCityOffers.map((offer) => offer.location)
-  // );
-
-
-  const onChangeTab = (city: City) => {
-    // setCurrentCity(city);
-    // dispatch(changeOffers(offers));
-    // setCurrentCityOffers(offers.filter((item) => item.city === city.name));
-  };
-
-  // useEffect(() => {
-  //   setCurrentPoints(currentCityOffers.map((offer) => offer.location));
-  //   setCurrentCityOffers(sortOffers(currentCityOffers, currentFilter));
-
-  // }, [currentCityOffers]);
+  const currentPoints = useState(offers.map((offer) => offer.location));
 
   const width = '512px';
   const height = '849px';
@@ -126,7 +80,7 @@ function Main({offers}: MainProps): JSX.Element {
           <h1 className="visually-hidden">Cities</h1>
           <div className="tabs">
             <section className="locations container">
-              <CityList cities={cities} onChangeTab={onChangeTab} />
+              <CityList cities={cities} />
             </section>
           </div>
           <div className="cities">
@@ -134,7 +88,7 @@ function Main({offers}: MainProps): JSX.Element {
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
                 <b className="places__found">
-                  {currentCityOffers.length} places to stay in {currentCity.name}
+                  {offers.length} places to stay in {city.name}
                 </b>
                 <form className="places__sorting" action="#" method="get" onClick={() => {
                   setIsOpenFilter(!isOpenFilter);
@@ -144,42 +98,20 @@ function Main({offers}: MainProps): JSX.Element {
                     Sort by
                   </span>
                   <span className="places__sorting-type" tabIndex={0}>
-                    {currentFilter}
+                    {filter}
                     <svg className="places__sorting-arrow" width="7" height="4">
                       <use xlinkHref="#icon-arrow-select"></use>
                     </svg>
                   </span>
-                  <SortList isOpenFilter={isOpenFilter} currentFilter={currentFilter} filterTypes={FilterType} toggleFilter={toggleFilter} />
-                  {/* <ul
-                    className={cn('places__options places__options--custom', {
-                      'places__options--opened': isOpenFilter,
-                    })}
-                  >
-                    {FilterType.map((filterType) => (
-                      <li
-                        key={filterType}
-                        className={cn('places__option', {
-                          'places__option--active':
-                            currentFilter === filterType,
-                        })}
-                        tabIndex={0}
-                        onClick={() => {
-                          setCurrentFilter(filterType);
-                          setIsOpenFilter(false);
-                        }}
-                      >
-                        {filterType}
-                      </li>
-                    ))}
-                  </ul> */}
+                  <SortList isOpenFilter={isOpenFilter} currentFilter={filter} filterTypes={FilterType} toggleFilter={toggleFilter} />
                 </form>
-                <PlaceList offers={currentCityOffers} />
+                <PlaceList offers={offers} />
               </section>
               <div className="cities__right-section">
                 <section className="cities__map map">
                   <Map
                     zoom={zoom}
-                    center={currentCity.location}
+                    center={city.location}
                     points={currentPoints}
                     width={width}
                     height={height}
