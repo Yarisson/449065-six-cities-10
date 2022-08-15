@@ -17,7 +17,7 @@ const offersSelector = (state: State) => {
   return state.offers.filter((offer) => offer.city === state.city.name)
     .sort((a, b) => {
       if (state.currentFilter === 'Price: low to high') {
-        b.price - a.price;
+        return b.price - a.price;
       }
 
       if (state.currentFilter === 'Price: high to low') {
@@ -27,6 +27,7 @@ const offersSelector = (state: State) => {
       if (state.currentFilter === 'Top rated first') {
         return b.rating - a.rating;
       }
+      return 0;
     });
 };
 
@@ -42,7 +43,7 @@ function Main(): JSX.Element {
     setIsOpenFilter(false);
   };
 
-  const currentPoints = useState(offers.map((offer) => offer.location));
+  const currentPoints = offers.map((offer) => offer.location);
 
   const width = '512px';
   const height = '849px';

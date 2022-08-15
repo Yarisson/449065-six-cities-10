@@ -9,7 +9,7 @@ type FavoriteProps = {
   type: string;
   premium: boolean;
   active: boolean;
-  rating: string;
+  rating: number;
   id: number;
   setActiveOffer: (evt: MouseEvent<HTMLElement>) => void;
 }
@@ -36,7 +36,7 @@ function Favorite({img, name, price, type, premium, active, rating, id, setActiv
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: `${rating}`}}></span>
+            <span style={{width: `${rating}%`}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

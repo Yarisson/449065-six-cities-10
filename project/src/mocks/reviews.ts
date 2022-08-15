@@ -5,7 +5,7 @@ const reviews = [
     img: 'img/avatar-max.jpg',
     text: 'Nice, cozy, warm big bed apartment. Good place for walking and shopping. Amazing view from window',
     date: 'April 2019',
-    rating: '100%',
+    rating: 100,
   },
   {
     id: 1,
@@ -13,7 +13,7 @@ const reviews = [
     img: 'img/avatar-max.jpg',
     text: 'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.',
     date: 'June 2020',
-    rating: '80%',
+    rating: 80,
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const reviews = [
     img: 'img/avatar-angelina.jpg',
     text: 'On the way to Amsterdam im still alive',
     date: 'Febrary 2019',
-    rating: '80%',
+    rating: 80,
   },
   {
     id: 3,
@@ -29,7 +29,7 @@ const reviews = [
     img: 'img/avatar-max.jpg',
     text: 'Its heart of city. Great option for tourist ways and comfortable place',
     date: 'October 2020',
-    rating: '80%',
+    rating: 80,
   },
   {
     id: 4,
@@ -37,7 +37,7 @@ const reviews = [
     img: 'img/avatar-angelina.jpg',
     text: 'So so, good, but not great. Maybe for me. But in evening was cold',
     date: 'December 2020',
-    rating: '70%',
+    rating: 70,
   },
 ];
 
