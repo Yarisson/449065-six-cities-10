@@ -16,7 +16,7 @@ function SortList({isOpenFilter, currentFilter, filterTypes, toggleFilter}: sort
   return (
     <ul
       className={cn('places__options places__options--custom', {
-        'places__options--opened': {isOpenFilter},
+        'places__options--opened': isOpenFilter,
       })}
     >
       {filterTypes.map((filterType) => (

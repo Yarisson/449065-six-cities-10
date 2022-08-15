@@ -17,11 +17,11 @@ const offersSelector = (state: State) => (
   state.offers.filter((offer) => offer.city === state.city.name)
     .sort((a, b) => {
       if (state.currentFilter === 'Price: low to high') {
-        return b.price - a.price;
+        return a.price - b.price;
       }
 
       if (state.currentFilter === 'Price: high to low') {
-        return a.price - b.price;
+        return b.price - a.price;
       }
 
       if (state.currentFilter === 'Top rated first') {
