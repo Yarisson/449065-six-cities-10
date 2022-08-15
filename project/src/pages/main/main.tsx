@@ -13,8 +13,8 @@ import { State } from '../../types/state';
 const citySelector = (state: State) => state.city;
 const filterSelector = (state: State) => state.currentFilter;
 
-const offersSelector = (state: State) => {
-  return state.offers.filter((offer) => offer.city === state.city.name)
+const offersSelector = (state: State) => (
+  state.offers.filter((offer) => offer.city === state.city.name)
     .sort((a, b) => {
       if (state.currentFilter === 'Price: low to high') {
         return b.price - a.price;
@@ -28,12 +28,10 @@ const offersSelector = (state: State) => {
         return b.rating - a.rating;
       }
       return 0;
-    });
-};
+    })
+);
 
 function Main(): JSX.Element {
-  // const dispatch = useAppDispatch();
-
   const city = useAppSelector(citySelector);
   const filter = useAppSelector(filterSelector);
   const [isOpenFilter, setIsOpenFilter] = useState(false);
