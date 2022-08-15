@@ -11,6 +11,7 @@ type MapProps = {
   points: Location[]
   width: string,
   height: string,
+  selectedLocation: Location | undefined
 };
 
 const icon = leaflet.icon({
@@ -20,13 +21,13 @@ const icon = leaflet.icon({
 });
 
 // иконка активного маркера
-// const iconActive = leaflet.icon({
-//   iconUrl: 'img/pin-active.svg',
-//   iconSize: [40, 40],
-//   iconAnchor: [20, 40]
-// });
+const iconActive = leaflet.icon({
+  iconUrl: 'img/pin-active.svg',
+  iconSize: [40, 40],
+  iconAnchor: [20, 40]
+});
 
-function Map({points, zoom, center, width, height}: MapProps): JSX.Element {
+function Map({points, zoom, center, width, height, selectedLocation}: MapProps): JSX.Element {
   const mapRef = useRef(null);
   const map = useMap(mapRef, center, zoom);
 
@@ -38,9 +39,17 @@ function Map({points, zoom, center, width, height}: MapProps): JSX.Element {
           lng: point.longitude
         });
 
-        marker
-          .setIcon(icon)
-          .addTo(map);
+        marker.setIcon(
+          selectedLocation !== undefined &&
+          point.latitude === selectedLocation?.latitude &&
+          point.longitude === selectedLocation?.longitude
+            ? iconActive
+            : icon
+        ).addTo(map);
+
+        // marker
+        //   .setIcon(icon)
+        //   .addTo(map);
       });
     }
   }, [map, points]);

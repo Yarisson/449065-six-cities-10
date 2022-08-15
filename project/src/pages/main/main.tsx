@@ -8,6 +8,7 @@ import SortList from '../../components/sortList/sortList';
 import { useState } from 'react';
 import cities from '../../mocks/cities';
 import FilterType from '../../mocks/filterTypes';
+import { Location } from '../../types/offer';
 import { State } from '../../types/state';
 
 const citySelector = (state: State) => state.city;
@@ -39,6 +40,17 @@ function Main(): JSX.Element {
 
   const toggleFilter = () => {
     setIsOpenFilter(false);
+  };
+
+  const [selectedLocation, setSelectedLocation] = useState<Location | undefined>(undefined);
+
+  const OfferPlaceHover = (hoveredOffer: number | null) => {
+    if (hoveredOffer === null) {
+      setSelectedLocation(undefined);
+    } else {
+      const currentOffer = offers.find((offer) => offer.id === hoveredOffer);
+      setSelectedLocation(currentOffer?.location);
+    }
   };
 
   const currentPoints = offers.map((offer) => offer.location);
@@ -104,7 +116,7 @@ function Main(): JSX.Element {
                   </span>
                   <SortList isOpenFilter={isOpenFilter} currentFilter={filter} filterTypes={FilterType} toggleFilter={toggleFilter} />
                 </form>
-                <PlaceList offers={offers} />
+                <PlaceList offers={offers} OfferPlaceHover={OfferPlaceHover} />
               </section>
               <div className="cities__right-section">
                 <section className="cities__map map">
@@ -114,6 +126,7 @@ function Main(): JSX.Element {
                     points={currentPoints}
                     width={width}
                     height={height}
+                    selectedLocation={selectedLocation}
                   />
                 </section>
               </div>
