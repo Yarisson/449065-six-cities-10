@@ -8,7 +8,6 @@ type PlaceListProps = {
 }
 
 function PlaceList({offers, OfferPlaceHover}: PlaceListProps): JSX.Element {
-  // const [selected, setSelected] = useState<number | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [activeOffer, setActiveOffer] = useState({});
 
@@ -27,10 +26,3 @@ function PlaceList({offers, OfferPlaceHover}: PlaceListProps): JSX.Element {
 }
 
 export default PlaceList;
-
-// onMouseLeave={() => {
-//   if(selected !== null) {
-//     setSelected(null);
-//     onOfferCardHover(null);
-//   }
-// }}
