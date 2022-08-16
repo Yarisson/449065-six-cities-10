@@ -38,7 +38,7 @@ function useMap(
       setMap(null);
       instance.remove();
     };
-  }, [mapRef, map, center, zoom]);
+  }, [mapRef, center, zoom]);
 
   return map;
 }

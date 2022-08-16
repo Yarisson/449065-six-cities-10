@@ -3,7 +3,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import { Link } from 'react-router-dom';
 import { changeCurrentCity } from '../../store/action';
 import { City } from '../../types/city';
-// import { useState } from 'react';
+import { useState } from 'react';
 
 type CityListProps = {
   cities: City[],
@@ -12,8 +12,8 @@ type CityListProps = {
 function CityList({cities}: CityListProps): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-  // const [activeCity, setActiveCity] = useState(useAppSelector((state) => state.city));
-  const activeCity = useAppSelector((state) => state.city);
+  const [activeCity, setActiveCity] = useState(useAppSelector((state) => state.city));
+  // const activeCity = useAppSelector((state) => state.city);
 
   const dispatch = useAppDispatch();
 
@@ -26,7 +26,7 @@ function CityList({cities}: CityListProps): JSX.Element {
               to={'/'}
               onClick={() => {
                 dispatch(changeCurrentCity(city));
-                // setActiveCity(city);
+                setActiveCity(city);
               }}
             >
               <span>{city.name}</span>

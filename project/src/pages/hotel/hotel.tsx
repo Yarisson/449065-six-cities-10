@@ -8,6 +8,7 @@ import Map from '../../components/map/map';
 import { Offer } from '../../types/offer';
 import { ReviewType } from '../../types/reviewType';
 import { Location } from '../../types/offer';
+import { useState } from 'react';
 
 type HotelProps = {
   offers: Offer[],
@@ -24,6 +25,17 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
   const city = useAppSelector((state) => state.city);
 
   const currentOffer = offers.find((item) => item.id === Number(id));
+
+  const [selectedLocation, setSelectedLocation] = useState<Location | undefined>(undefined);
+
+  const OfferPlaceHover = (hoveredOffer: number | null) => {
+    if (hoveredOffer === null) {
+      setSelectedLocation(undefined);
+    } else {
+      const selectedOffer = offers.find((offer) => offer.id === hoveredOffer);
+      setSelectedLocation(selectedOffer?.location);
+    }
+  };
 
   return (
     <div className="page">
@@ -176,8 +188,7 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
             </div>
           </div>
           <section className="property__map map">
-            <Map zoom={zoom} center={city.location} points={nearPlaces} width={width} height={height} />
-            {/*  */}
+            <Map zoom={zoom} center={city.location} points={nearPlaces} width={width} height={height} selectedLocation={selectedLocation} />
           </section>
         </section>
         <div className="container">
@@ -186,7 +197,7 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              <PlaceList offers={offers} />
+              <PlaceList offers={offers} OfferPlaceHover={OfferPlaceHover} />
             </div>
           </section>
         </div>

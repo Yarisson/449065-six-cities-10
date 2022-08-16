@@ -20,7 +20,6 @@ const icon = leaflet.icon({
   iconAnchor: [20, 40]
 });
 
-// иконка активного маркера
 const iconActive = leaflet.icon({
   iconUrl: 'img/pin-active.svg',
   iconSize: [40, 40],
@@ -33,6 +32,12 @@ function Map({points, zoom, center, width, height, selectedLocation}: MapProps):
 
   useEffect(() => {
     if (map) {
+      if (mapRef) {
+        // map.remove();
+        map.eachLayer((layer) => {
+          map.removeLayer(layer);
+        });
+      }
       points.forEach((point) => {
         const marker = new Marker({
           lat: point.latitude,
@@ -46,13 +51,9 @@ function Map({points, zoom, center, width, height, selectedLocation}: MapProps):
             ? iconActive
             : icon
         ).addTo(map);
-
-        // marker
-        //   .setIcon(icon)
-        //   .addTo(map);
       });
     }
-  }, [map, points]);
+  }, [map, points, center, selectedLocation]);
   return (
     <div style={{width: `${width}`, height: `${height}`}} ref={mapRef} id="map">
     </div>

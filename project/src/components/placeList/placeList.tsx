@@ -8,27 +8,29 @@ type PlaceListProps = {
 }
 
 function PlaceList({offers, OfferPlaceHover}: PlaceListProps): JSX.Element {
-  const [selected, setSelected] = useState<number | null>(null);
+  // const [selected, setSelected] = useState<number | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [activeOffer, setActiveOffer] = useState({});
 
   return (
     <div className="cities__places-list places__list tabs__content">
-      {offers.map((item, index) => <Place key={item.id} {...item}
-      setActiveOffer={() => {
-        setActiveOffer(item);
-        OfferPlaceHover(item.id);
-      }}
-
-        // onMouseLeave={() => {
-        //   if(selected !== null) {
-        //     setSelected(null);
-        //     onOfferCardHover(null);
-        //   }
-        // }}
-      />)}
+      {offers.map((item, index) => (
+        <Place key={item.id} {...item}
+          setActiveOffer={() => {
+            setActiveOffer(item);
+            OfferPlaceHover(item.id);
+          }}
+        />
+      ))}
     </div>
   );
 }
 
 export default PlaceList;
+
+// onMouseLeave={() => {
+//   if(selected !== null) {
+//     setSelected(null);
+//     onOfferCardHover(null);
+//   }
+// }}
