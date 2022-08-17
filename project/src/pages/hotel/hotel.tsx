@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { useAppSelector } from '../../hooks';
 import FormComment from '../../components/formComment/formComment';
 import Header from '../../components/header/header';
 import PlaceList from '../../components/placeList/placeList';
@@ -6,25 +7,33 @@ import ReviewList from '../../components/reviewList/reviewList';
 import Map from '../../components/map/map';
 import { Offer } from '../../types/offer';
 import { ReviewType } from '../../types/reviewType';
-import { City } from '../../types/city';
 import { Location } from '../../types/offer';
+import { useState } from 'react';
 
 type HotelProps = {
   offers: Offer[],
   reviews: ReviewType[],
-  city: City,
   nearPlaces: Location[],
 }
 
-function Hotel({offers, reviews, city, nearPlaces}: HotelProps): JSX.Element {
+function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
   const params = useParams();
   const {id} = params;
-  const width = '90%';
-  const height = '578px';
-  // const points = nearPlaces.map((item) => item.location);
   const zoom = 13;
+  const city = useAppSelector((state) => state.city);
 
   const currentOffer = offers.find((item) => item.id === Number(id));
+
+  const [selectedLocation, setSelectedLocation] = useState<Location | undefined>(undefined);
+
+  const OfferPlaceHover = (hoveredOffer: number | null) => {
+    if (hoveredOffer === null) {
+      setSelectedLocation(undefined);
+    } else {
+      const selectedOffer = offers.find((offer) => offer.id === hoveredOffer);
+      setSelectedLocation(selectedOffer?.location);
+    }
+  };
 
   return (
     <div className="page">
@@ -176,10 +185,7 @@ function Hotel({offers, reviews, city, nearPlaces}: HotelProps): JSX.Element {
               </section>
             </div>
           </div>
-          <section className="property__map map">
-            <Map zoom={zoom} center={city.location} points={nearPlaces} width={width} height={height} />
-            {/*  */}
-          </section>
+          <Map className="property__map map" zoom={zoom} center={city.location} points={nearPlaces} selectedLocation={selectedLocation} />
         </section>
         <div className="container">
           <section className="near-places places">
@@ -187,7 +193,7 @@ function Hotel({offers, reviews, city, nearPlaces}: HotelProps): JSX.Element {
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              <PlaceList offers={offers} />
+              <PlaceList offers={offers} OfferPlaceHover={OfferPlaceHover} />
             </div>
           </section>
         </div>

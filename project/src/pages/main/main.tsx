@@ -1,24 +1,63 @@
-import { Link } from 'react-router-dom';
+import { useAppSelector } from '../../hooks';
 import PlaceList from '../../components/placeList/placeList';
 import Header from '../../components/header/header';
-import { Offer } from '../../types/offer';
 import Map from '../../components/map/map';
-import { City } from '../../types/city';
+import CityList from '../../components/cityList/cityList';
+import SortList from '../../components/sortList/sortList';
+import { useState } from 'react';
+import cities from '../../mocks/cities';
+import FilterType from '../../mocks/filterTypes';
+import { Location } from '../../types/offer';
+import { State } from '../../types/state';
 
-type MainProps = {
-  offers: Offer[],
-  city: City,
-}
+const citySelector = (state: State) => state.city;
+const filterSelector = (state: State) => state.currentFilter;
 
-function Main({offers, city}: MainProps): JSX.Element {
-  const width = '512px';
-  const height = '849px';
-  const points = offers.map((item) => item.location);
+const offersSelector = (state: State) => (
+  state.offers.filter((offer) => offer.city === state.city.name)
+    .sort((a, b) => {
+      if (state.currentFilter === 'Price: low to high') {
+        return a.price - b.price;
+      }
+
+      if (state.currentFilter === 'Price: high to low') {
+        return b.price - a.price;
+      }
+
+      if (state.currentFilter === 'Top rated first') {
+        return b.rating - a.rating;
+      }
+      return 0;
+    })
+);
+
+function Main(): JSX.Element {
+  const city = useAppSelector(citySelector);
+  const filter = useAppSelector(filterSelector);
+  const [isOpenFilter, setIsOpenFilter] = useState(false);
+  const offers = useAppSelector(offersSelector);
+
+  const toggleFilter = () => {
+    setIsOpenFilter(false);
+  };
+
+  const [selectedLocation, setSelectedLocation] = useState<Location | undefined>(undefined);
+
+  const OfferPlaceHover = (hoveredOffer: number | null) => {
+    if (hoveredOffer === null) {
+      setSelectedLocation(undefined);
+    } else {
+      const currentOffer = offers.find((offer) => offer.id === hoveredOffer);
+      setSelectedLocation(currentOffer?.location);
+    }
+  };
+
+  const currentPoints = offers.map((offer) => offer.location);
   const zoom = 10;
 
   return (
     <section>
-      <div style={{display: 'none'}}>
+      <div style={{ display: 'none' }}>
         <svg xmlns="http://www.w3.org/2000/svg">
           <symbol id="icon-arrow-select" viewBox="0 0 7 4">
             <path
@@ -43,70 +82,47 @@ function Main({offers, city}: MainProps): JSX.Element {
       </div>
 
       <div className="page page--gray page--main">
-        <Header/>
+        <Header />
         <main className="page__main page__main--index">
           <h1 className="visually-hidden">Cities</h1>
           <div className="tabs">
             <section className="locations container">
-              <ul className="locations__list tabs__list">
-                <li className="locations__item">
-                  <Link className="locations__item-link tabs__item" to={'/'}><span>Paris</span></Link>
-                </li>
-                <li className="locations__item">
-                  <Link className="locations__item-link tabs__item" to={'/'}><span>Cologne</span></Link>
-                </li>
-                <li className="locations__item">
-                  <Link className="locations__item-link tabs__item" to={'/'}><span>Brussels</span></Link>
-                </li>
-                <li className="locations__item">
-                  <Link className='locations__item-link tabs__item tabs__item--active' to={'/'}><span>Amsterdam</span></Link>
-                </li>
-                <li className="locations__item">
-                  <Link className="locations__item-link tabs__item" to={'/'}><span>Hamburg</span></Link>
-                </li>
-                <li className="locations__item">
-                  <Link className="locations__item-link tabs__item" to={'/'}><span>Dusseldorf</span></Link>
-                </li>
-              </ul>
+              <CityList cities={cities} />
             </section>
           </div>
           <div className="cities">
             <div className="cities__places-container container">
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
-                <b className="places__found">312 places to stay in Amsterdam</b>
-                <form className="places__sorting" action="#" method="get">
-                  <span className="places__sorting-caption">Sort by</span>
+                <b className="places__found">
+                  {offers.length} places to stay in {city.name}
+                </b>
+                <form className="places__sorting" action="#" method="get" onClick={() => {
+                  setIsOpenFilter(!isOpenFilter);
+                }}
+                >
+                  <span className="places__sorting-caption">
+                    Sort by
+                  </span>
                   <span className="places__sorting-type" tabIndex={0}>
-                    Popular
+                    {filter}
                     <svg className="places__sorting-arrow" width="7" height="4">
                       <use xlinkHref="#icon-arrow-select"></use>
                     </svg>
                   </span>
-                  <ul className="places__options places__options--custom places__options--opened">
-                    <li
-                      className="places__option places__option--active"
-                      tabIndex={0}
-                    >
-                      Popular
-                    </li>
-                    <li className="places__option" tabIndex={0}>
-                      Price: low to high
-                    </li>
-                    <li className="places__option" tabIndex={0}>
-                      Price: high to low
-                    </li>
-                    <li className="places__option" tabIndex={0}>
-                      Top rated first
-                    </li>
-                  </ul>
+                  <SortList isOpenFilter={isOpenFilter} currentFilter={filter} filterTypes={FilterType} toggleFilter={toggleFilter} />
                 </form>
-                <PlaceList offers={offers} />
+                <PlaceList offers={offers} OfferPlaceHover={OfferPlaceHover} />
               </section>
               <div className="cities__right-section">
-                <section className="cities__map map">
-                  <Map zoom={zoom} center={city.location} points={points} width={width} height={height}/>
-                </section>
+
+                <Map
+                  className="cities__map map"
+                  zoom={zoom}
+                  center={city.location}
+                  points={currentPoints}
+                  selectedLocation={selectedLocation}
+                />
               </div>
             </div>
           </div>

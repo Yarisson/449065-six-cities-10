@@ -11,7 +11,7 @@ export interface Offer {
   type: string,
   premium: boolean,
   active: boolean,
-  stars: string,
+  rating: number,
   isFavorite: boolean,
   location: Location,
   city: string,
