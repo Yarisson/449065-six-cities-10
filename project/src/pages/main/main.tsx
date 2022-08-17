@@ -1,5 +1,4 @@
 import { useAppSelector } from '../../hooks';
-// import { changeOffers } from '../../store/action';
 import PlaceList from '../../components/placeList/placeList';
 import Header from '../../components/header/header';
 import Map from '../../components/map/map';

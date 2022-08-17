@@ -10,10 +10,8 @@ type CityListProps = {
 }
 
 function CityList({cities}: CityListProps): JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   const [activeCity, setActiveCity] = useState(useAppSelector((state) => state.city));
-  // const activeCity = useAppSelector((state) => state.city);
 
   const dispatch = useAppDispatch();
 
