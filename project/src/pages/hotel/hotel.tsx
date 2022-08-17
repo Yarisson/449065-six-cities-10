@@ -19,8 +19,6 @@ type HotelProps = {
 function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
   const params = useParams();
   const {id} = params;
-  const width = '90%';
-  const height = '578px';
   const zoom = 13;
   const city = useAppSelector((state) => state.city);
 
@@ -187,9 +185,7 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
               </section>
             </div>
           </div>
-          <section className="property__map map">
-            <Map zoom={zoom} center={city.location} points={nearPlaces} width={width} height={height} selectedLocation={selectedLocation} />
-          </section>
+          <Map className="property__map map" zoom={zoom} center={city.location} points={nearPlaces} selectedLocation={selectedLocation} />
         </section>
         <div className="container">
           <section className="near-places places">

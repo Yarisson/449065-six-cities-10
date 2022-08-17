@@ -14,13 +14,7 @@ function useMap(
       return;
     }
 
-    const instance = new Map(mapRef.current, {
-      center: {
-        lat: center.latitude,
-        lng: center.longitude
-      },
-      zoom: zoom
-    });
+    const instance = new Map(mapRef.current);
 
     const layer = new TileLayer(
       'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
@@ -38,10 +32,21 @@ function useMap(
       setMap(null);
       instance.remove();
     };
-  }, [mapRef, center, zoom]);
+  }, [mapRef]);
+
+
+  useEffect(() => {
+    if (map === null) {
+      return;
+    }
+
+    map.setView({
+      lat: center.latitude,
+      lng: center.longitude
+    }, zoom);
+  }, [map, center, zoom]);
 
   return map;
 }
 
 export default useMap;
-

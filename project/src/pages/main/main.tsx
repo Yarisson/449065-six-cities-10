@@ -54,9 +54,6 @@ function Main(): JSX.Element {
   };
 
   const currentPoints = offers.map((offer) => offer.location);
-
-  const width = '512px';
-  const height = '849px';
   const zoom = 10;
 
   return (
@@ -119,16 +116,14 @@ function Main(): JSX.Element {
                 <PlaceList offers={offers} OfferPlaceHover={OfferPlaceHover} />
               </section>
               <div className="cities__right-section">
-                <section className="cities__map map">
-                  <Map
-                    zoom={zoom}
-                    center={city.location}
-                    points={currentPoints}
-                    width={width}
-                    height={height}
-                    selectedLocation={selectedLocation}
-                  />
-                </section>
+
+                <Map
+                  className="cities__map map"
+                  zoom={zoom}
+                  center={city.location}
+                  points={currentPoints}
+                  selectedLocation={selectedLocation}
+                />
               </div>
             </div>
           </div>
