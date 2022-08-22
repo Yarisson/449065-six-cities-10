@@ -3,9 +3,11 @@ import { City } from '../types/city';
 import { Offer } from '../types/offer';
 
 export enum Action {
+  LoadOffers = 'LOAD_OFFERS',
   ChangeCurrentCity = 'CHANGE_CURRENT_CITY',
   ChangeOffers = 'CHANGE_OFFERS',
   ChangeFilter = 'CHANGE_FILTER',
+  setDataLoadedStatus = 'SET_DATA_LOADED_STATUS',
 }
 
 export const getOffers = createAction('offers');
@@ -17,4 +19,10 @@ export const changeOffers = createAction(Action.ChangeOffers, (offers: Offer[]) 
 }));
 export const changeFilter = createAction(Action.ChangeFilter, (filter: string) => ({
   payload: filter,
+}));
+export const loadOffers = createAction(Action.LoadOffers, (offers: Offer[]) => ({
+  payload: offers,
+}));
+export const setDataLoadedStatus = createAction(Action.setDataLoadedStatus, (loaded: boolean) => ({
+  payload: loaded,
 }));

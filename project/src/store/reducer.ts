@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { getOffers, changeCurrentCity, changeOffers, changeFilter } from './action';
+import { getOffers, changeCurrentCity, changeOffers, changeFilter, loadOffers, setDataLoadedStatus } from './action';
 import { Offer } from '../types/offer';
 import { City } from '../types/city';
 import offers from '../mocks/offers';
@@ -9,12 +9,14 @@ type InitialState = {
   city: City,
   offers: Offer[],
   currentFilter: string,
+  loaded: boolean,
 };
 
 const initialState: InitialState = {
   city: city,
   offers: [],
   currentFilter: 'Popular',
+  loaded: false,
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -30,7 +32,13 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(changeFilter, (state, action) => {
       state.currentFilter = action.payload;
-    });
+    })
+    .addCase(loadOffers, (state, action) => {
+      state.offers = action.payload;
+    })
+    .addCase(setDataLoadedStatus, (state, action) => {
+      state.loaded = action.payload;
+    })
 });
 
 export {reducer};

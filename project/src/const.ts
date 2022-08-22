@@ -23,3 +23,14 @@ export interface Place {
 }
 
 export type Places = Place[]
+
+export enum APIRoute {
+  Offers = '/hotels',
+  Hotel = '/hotels/{hotelId}',
+  Nearby = '/hotels/{hotelId}/nearby',
+  Favorite = '/favorite',
+  FavoriteChange = '/favorite/{hotelId}/{status}',
+  Comments = '/comments',
+  Login = '/login',
+  Logout = '/logout'
+}

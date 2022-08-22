@@ -5,6 +5,10 @@ import App from './components/app/app';
 import { store } from './store';
 import reviews from './mocks/reviews';
 import nearPlaces from './mocks/nearPlaces';
+import {fetchQuestionAction} from './store/api-actions';
+import 'react-toastify/dist/ReactToastify.css';
+
+store.dispatch(fetchQuestionAction());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
