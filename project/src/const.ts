@@ -17,7 +17,7 @@ export interface Place {
   name: string,
   price: number,
   type: string,
-  premium: boolean,
+  isPremium: boolean,
   active: boolean,
   stars: string
 }

@@ -10,6 +10,7 @@ import Hotel from '../../pages/hotel/hotel';
 import PrivateRoute from '../private-route/privateRoute';
 import { Location } from '../../types/offer';
 import { ReviewType } from '../../types/reviewType';
+import LoadingSpinner from '../../components/spinner/spinner';
 
 type AppProps = {
   reviews: ReviewType[],
@@ -20,13 +21,14 @@ function App({reviews, nearPlaces}: AppProps): JSX.Element {
   const dispatch = useAppDispatch();
   dispatch(getOffers());
   const offers = useAppSelector((state) => state.offers);
+  const loaded = useAppSelector((state) => state.loaded)
 
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path={'/'}
-          element={<Main />}
+          element={loaded ? <LoadingSpinner /> : <Main/>}
         />
         <Route
           path={AppRoute.Favorites}
