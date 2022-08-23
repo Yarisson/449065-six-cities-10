@@ -12,7 +12,7 @@ export enum Action {
   CurrentHotel = 'CURRENT_HOTEL',
 }
 
-export const getOffers = createAction('offers');
+// export const getOffers = createAction('offers');
 export const changeCurrentCity = createAction(Action.ChangeCurrentCity, (city: City) => ({
   payload: city,
 }));
@@ -27,10 +27,4 @@ export const loadOffers = createAction(Action.LoadOffers, (offers: Offer[]) => (
 }));
 export const setDataLoadedStatus = createAction(Action.setDataLoadedStatus, (loaded: boolean) => ({
   payload: loaded,
-}));
-export const loadNearby = createAction(Action.LoadNearby, (nearby: Offer[]) => ({
-  payload: nearby,
-}));
-export const currentHotel = createAction(Action.CurrentHotel, (currentHotel: Offer) => ({
-  payload: currentHotel,
 }));

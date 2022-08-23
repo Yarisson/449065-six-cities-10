@@ -10,23 +10,20 @@ import { ReviewType } from '../../types/reviewType';
 import { Location } from '../../types/offer';
 import { useState } from 'react';
 import { State } from '../../types/state';
-import {fetchNearbyAction} from '../../store/api-actions';
-import { store } from '../../store';
 
-store.dispatch(fetchNearbyAction());
 type HotelProps = {
+  offers: Offer[],
   reviews: ReviewType[],
   nearPlaces: Location[],
 }
 
-function Hotel({reviews, nearPlaces}: HotelProps): JSX.Element {
+function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
   const params = useParams();
   const {id} = params;
   const zoom = 13;
   const city = useAppSelector((state) => state.city);
 
-  const currentOffer = (state: State) => state.offers.find((item) => item.id === Number(id));
-  const nearbyOffer = (state: State) => state.nearby;
+  const currentOffer = offers.find((item) => item.id === Number(id));
 
   const [selectedLocation, setSelectedLocation] = useState<Location | undefined>(undefined);
 
@@ -148,7 +145,7 @@ function Hotel({reviews, nearPlaces}: HotelProps): JSX.Element {
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              <PlaceList offers={nearbyOffer} OfferPlaceHover={OfferPlaceHover} />
+              <PlaceList offers={offers} OfferPlaceHover={OfferPlaceHover} />
             </div>
           </section>
         </div>

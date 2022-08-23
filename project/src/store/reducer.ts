@@ -1,8 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { getOffers, changeCurrentCity, changeOffers, changeFilter, loadOffers, setDataLoadedStatus, loadNearby } from './action';
+import { changeCurrentCity, changeOffers, changeFilter, loadOffers, setDataLoadedStatus } from './action';
 import { Offer } from '../types/offer';
 import { City } from '../types/city';
-import offers from '../mocks/offers';
 import city from '../mocks/city';
 
 type InitialState = {
@@ -10,7 +9,6 @@ type InitialState = {
   offers: Offer[],
   currentFilter: string,
   loaded: boolean,
-  nearby: Offer[],
 };
 
 const initialState: InitialState = {
@@ -18,7 +16,6 @@ const initialState: InitialState = {
   offers: [],
   currentFilter: 'Popular',
   loaded: false,
-  nearby: [],
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -26,9 +23,6 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(changeCurrentCity, (state, action) => {
       state.city = action.payload;
     })
-    // .addCase(getOffers, (state) => {
-    //   state.offers = offers;
-    // })
     .addCase(changeOffers, (state, action) => {
       state.offers = action.payload;
     })
@@ -40,9 +34,6 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setDataLoadedStatus, (state, action) => {
       state.loaded = action.payload;
-    })
-    .addCase(loadNearby, (state, action) => {
-      state.nearby = action.payload;
     })
 });
 
