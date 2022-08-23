@@ -155,5 +155,3 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
 }
 
 export default Hotel;
-
-// Nearby
