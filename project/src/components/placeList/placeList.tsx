@@ -1,24 +1,20 @@
 import Place from '../place/place';
 import { Offer } from '../../types/offer';
-import { useState } from 'react';
+import {useAppDispatch} from '../../hooks';
+import { getCurrentOffer } from '../../store/action';
 
 type PlaceListProps = {
   offers: Offer[],
-  OfferPlaceHover: (id: number | null) => void,
 }
 
-function PlaceList({offers, OfferPlaceHover}: PlaceListProps): JSX.Element {
-  // eslint-disable-next-line
-  const [activeOffer, setActiveOffer] = useState({});
+function PlaceList({offers}: PlaceListProps): JSX.Element {
+  const dispatch = useAppDispatch();
 
   return (
     <div className="cities__places-list places__list tabs__content">
       {offers.map((item, index) => (
         <Place key={item.id} {...item}
-          setActiveOffer={() => {
-            setActiveOffer(item);
-            OfferPlaceHover(item.id);
-          }}
+          onClick={dispatch(getCurrentOffer(item))}
         />
       ))}
     </div>

@@ -8,8 +8,6 @@ import Map from '../../components/map/map';
 import { Offer } from '../../types/offer';
 import { ReviewType } from '../../types/reviewType';
 import { Location } from '../../types/offer';
-import { useState } from 'react';
-import { State } from '../../types/state';
 
 type HotelProps = {
   offers: Offer[],
@@ -22,19 +20,12 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
   const {id} = params;
   const zoom = 13;
   const city = useAppSelector((state) => state.city);
+  // const offers = (state: State) => state.offers;
 
   const currentOffer = offers.find((item) => item.id === Number(id));
 
-  const [selectedLocation, setSelectedLocation] = useState<Location | undefined>(undefined);
-
-  const OfferPlaceHover = (hoveredOffer: number | null) => {
-    const selectedOffer = useAppSelector((state) => state.offers.find((offer) => offer.id === hoveredOffer));
-    if (hoveredOffer === null) {
-      setSelectedLocation(undefined);
-    } else {
-      selectedOffer?.location;
-    }
-  };
+  console.log(currentOffer);
+  const selectedLocation = useAppSelector((state) => state.activeOffer?.location);
 
   return (
     <div className="page">
@@ -44,6 +35,7 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
           <div className="property__gallery-container container">
             <div className="property__gallery">
               {currentOffer?.images.map((item, index) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <div key={index} className="property__image-wrapper">
                   <img
                     className="property__image"
@@ -83,7 +75,7 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="property__rating-value rating__value">
-                {currentOffer?.rating}
+                  {currentOffer?.rating}
                 </span>
               </div>
               <ul className="property__features">
@@ -91,7 +83,7 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
                   {currentOffer?.type}
                 </li>
                 <li className="property__feature property__feature--bedrooms">
-                {currentOffer?.bedrooms}
+                  {currentOffer?.bedrooms}
                 </li>
                 <li className="property__feature property__feature--adults">
                   Max {currentOffer?.maxAdults} adults
@@ -104,7 +96,7 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
               <div className="property__inside">
                 <h2 className="property__inside-title">What&apos;s inside</h2>
                 <ul className="property__inside-list">
-                {currentOffer?.goods.map((item, index) => (<li key={index} className="property__inside-item">{item}</li>))}
+                  {currentOffer?.goods.map((item, index) => (<li key={index} className="property__inside-item">{item}</li>))}
                 </ul>
               </div>
               <div className="property__host">
@@ -145,7 +137,7 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              <PlaceList offers={offers} OfferPlaceHover={OfferPlaceHover} />
+              <PlaceList offers={offers} />
             </div>
           </section>
         </div>
