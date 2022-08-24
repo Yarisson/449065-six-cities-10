@@ -15,6 +15,8 @@ type PlaceProps = {
 }
 
 function Place({previewImage, title, price, type, isPremium, active, rating, id, setActiveOffer}: PlaceProps): JSX.Element {
+
+  const ratingWidth = rating*100/5;
   return (
     <article className="cities__card place-card" onMouseOver={setActiveOffer}>
       {isPremium && <div className="place-card__mark"><span>Premium</span></div>}
@@ -47,7 +49,7 @@ function Place({previewImage, title, price, type, isPremium, active, rating, id,
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: `${rating}%`}}></span>
+            <span style={{width: `${ratingWidth}%`}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
