@@ -10,7 +10,6 @@ export enum Action {
   ChangeFilter = 'CHANGE_FILTER',
   SetDataLoadedStatus = 'SET_DATA_LOADED_STATUS',
   CurrentHotel = 'CURRENT_HOTEL',
-  GetCurrentOffer = 'GET_CURRENT_OFFER',
   GetActiveOfferId = 'GET_ACTIVE_OFFER_ID',
 }
 
@@ -28,9 +27,6 @@ export const loadOffers = createAction(Action.LoadOffers, (offers: Offer[]) => (
 }));
 export const setDataLoadedStatus = createAction(Action.SetDataLoadedStatus, (loaded: boolean) => ({
   payload: loaded,
-}));
-export const getCurrentOffer = createAction(Action.GetCurrentOffer, (currentOffer: Offer) => ({
-  payload: currentOffer,
 }));
 export const getActiveOfferId = createAction(Action.GetActiveOfferId, (activeOfferId: number) => ({
   payload: activeOfferId,

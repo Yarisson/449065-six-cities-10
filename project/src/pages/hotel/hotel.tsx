@@ -20,11 +20,7 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
   const {id} = params;
   const zoom = 13;
   const city = useAppSelector((state) => state.city);
-  // const offers = (state: State) => state.offers;
-
-  const currentOffer = offers.find((item) => item.id === Number(id));
-
-  console.log(currentOffer);
+  const currentOffer = offers.find((item) => item.id === Number(id ? id.replace(/[^0-9]/g, '') : ''));
   const selectedLocation = useAppSelector((state) => state.activeOffer?.location);
 
   return (

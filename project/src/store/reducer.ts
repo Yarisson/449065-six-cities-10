@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { changeCurrentCity, changeOffers, changeFilter, loadOffers, setDataLoadedStatus, getCurrentOffer, getActiveOfferId } from './action';
+import { changeCurrentCity, changeOffers, changeFilter, loadOffers, setDataLoadedStatus, getActiveOfferId } from './action';
 import { Offer } from '../types/offer';
 import { City } from '../types/city';
 import city from '../mocks/city';
@@ -10,7 +10,6 @@ type InitialState = {
   currentFilter: string,
   loaded: boolean,
   activeOffer: Offer | undefined,
-  currentOffer: Offer | undefined,
 };
 
 const initialState: InitialState = {
@@ -19,7 +18,6 @@ const initialState: InitialState = {
   currentFilter: 'Popular',
   loaded: false,
   activeOffer: undefined,
-  currentOffer: undefined,
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -38,9 +36,6 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setDataLoadedStatus, (state, action) => {
       state.loaded = action.payload;
-    })
-    .addCase(getCurrentOffer, (state, action) => {
-      state.currentOffer = action.payload;
     })
     .addCase(getActiveOfferId, (state, action) => {
       const currentOffer = state.offers.find((offer) => offer.id === action.payload)

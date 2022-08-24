@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import {useAppDispatch} from '../../hooks';
-import { getActiveOfferId, getCurrentOffer } from '../../store/action';
+import { getActiveOfferId } from '../../store/action';
 
 type PlaceProps = {
   previewImage: string;
