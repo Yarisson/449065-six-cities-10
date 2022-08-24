@@ -28,11 +28,11 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
   const [selectedLocation, setSelectedLocation] = useState<Location | undefined>(undefined);
 
   const OfferPlaceHover = (hoveredOffer: number | null) => {
+    const selectedOffer = useAppSelector((state) => state.offers.find((offer) => offer.id === hoveredOffer));
     if (hoveredOffer === null) {
       setSelectedLocation(undefined);
     } else {
-      const selectedOffer = (state: State) => state.offers.find((offer) => offer.id === hoveredOffer);
-      setSelectedLocation(selectedOffer?.location);
+      selectedOffer?.location;
     }
   };
 

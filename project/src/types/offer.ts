@@ -37,5 +37,4 @@ export interface Offer {
   location: Location,
   maxAdults: number,
   previewImage: string,
-  // city: string,
 }
