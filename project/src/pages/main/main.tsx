@@ -7,14 +7,13 @@ import SortList from '../../components/sortList/sortList';
 import { useState } from 'react';
 import cities from '../../mocks/cities';
 import FilterType from '../../mocks/filterTypes';
-import { Location } from '../../types/offer';
 import { State } from '../../types/state';
 
 const citySelector = (state: State) => state.city;
 const filterSelector = (state: State) => state.currentFilter;
 
 const offersSelector = (state: State) => (
-  state.offers.filter((offer) => offer.city === state.city.name)
+  state.offers.filter((offer) => offer.city.name === state.city.name)
     .sort((a, b) => {
       if (state.currentFilter === 'Price: low to high') {
         return a.price - b.price;
@@ -41,16 +40,7 @@ function Main(): JSX.Element {
     setIsOpenFilter(false);
   };
 
-  const [selectedLocation, setSelectedLocation] = useState<Location | undefined>(undefined);
-
-  const OfferPlaceHover = (hoveredOffer: number | null) => {
-    if (hoveredOffer === null) {
-      setSelectedLocation(undefined);
-    } else {
-      const currentOffer = offers.find((offer) => offer.id === hoveredOffer);
-      setSelectedLocation(currentOffer?.location);
-    }
-  };
+  const selectedLocation = useAppSelector((state) => state.activeOffer?.location);
 
   const currentPoints = offers.map((offer) => offer.location);
   const zoom = 10;
@@ -112,7 +102,7 @@ function Main(): JSX.Element {
                   </span>
                   <SortList isOpenFilter={isOpenFilter} currentFilter={filter} filterTypes={FilterType} toggleFilter={toggleFilter} />
                 </form>
-                <PlaceList offers={offers} OfferPlaceHover={OfferPlaceHover} />
+                <PlaceList offers={offers} />
               </section>
               <div className="cities__right-section">
 
