@@ -30,4 +30,4 @@ export const setDataLoadedStatus = createAction(Action.SetDataLoadedStatus, (loa
 }));
 export const getActiveOfferId = createAction(Action.GetActiveOfferId, (activeOfferId: number) => ({
   payload: activeOfferId,
-}))
+}));

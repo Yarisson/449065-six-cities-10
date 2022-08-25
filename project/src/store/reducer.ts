@@ -38,7 +38,7 @@ const reducer = createReducer(initialState, (builder) => {
       state.loaded = action.payload;
     })
     .addCase(getActiveOfferId, (state, action) => {
-      const currentOffer = state.offers.find((offer) => offer.id === action.payload)
+      const currentOffer = state.offers.find((offer) => offer.id === action.payload);
       state.activeOffer = currentOffer;
     });
 });
