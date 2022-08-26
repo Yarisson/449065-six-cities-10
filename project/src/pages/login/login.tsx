@@ -1,10 +1,12 @@
 import { useAppSelector } from '../../hooks';
 import {useRef, FormEvent} from 'react';
+import {useNavigate} from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {useAppDispatch} from '../../hooks';
 import {AuthData} from '../../types/authData';
 import { loginAction } from '../../store/api-actions';
 import { State } from '../../types/state';
+import {AppRoute} from '../../const';
 import EmptyHeader from '../../components/header/emptyHeader';
 
 const citySelector = (state: State) => state.city;
@@ -13,6 +15,7 @@ function Login(): JSX.Element {
   const city = useAppSelector(citySelector);
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
+  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
   const onSubmit = (authData: AuthData) => {
@@ -41,6 +44,7 @@ function Login(): JSX.Element {
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
                 <input
+                  ref={loginRef}
                   className="login__input form__input"
                   type="email"
                   name="email"
@@ -51,6 +55,7 @@ function Login(): JSX.Element {
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
                 <input
+                  ref={passwordRef}
                   className="login__input form__input"
                   type="password"
                   name="password"
@@ -61,7 +66,7 @@ function Login(): JSX.Element {
               <button
                 className="login__submit form__submit button"
                 type="submit"
-
+                onClick={() => navigate(AppRoute.Main)}
               >
                 Sign in
               </button>
