@@ -71,8 +71,8 @@ export const fetchActiveRoom = createAsyncThunk<Offer, string | undefined, {
   extra: AxiosInstance
 }>(
   'offers/fetchActiveHotel',
-  async (roomID, {dispatch, extra: api}) => {
-    const {data} = await api.get<Offer>(`${APIRoute.Hotel}/${roomID}`);
+  async (hotelId, {dispatch, extra: api}) => {
+    const {data} = await api.get<Offer>(`${APIRoute.Hotel}/${hotelId}`);
     dispatch(getCurrentOffer(data));
     return data;
   },
@@ -83,8 +83,8 @@ export const fetchNearRooms = createAsyncThunk<Offer[], string | undefined, {
   extra: AxiosInstance
 }>(
   'offers/fetchNearHotels',
-  async (roomID, {extra: api}) => {
-    const {data} = await api.get<Offer[]>(`${APIRoute.Hotel}/${roomID}/nearby`);
+  async (hotelId, {extra: api}) => {
+    const {data} = await api.get<Offer[]>(`${APIRoute.Hotel}/${hotelId}/nearby`);
     return data;
   },
 );
