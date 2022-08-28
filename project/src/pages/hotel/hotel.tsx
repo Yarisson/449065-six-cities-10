@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
+import { store } from '../../store';
 import FormComment from '../../components/formComment/formComment';
 import Header from '../../components/header/header';
 import PlaceList from '../../components/placeList/placeList';
@@ -8,6 +9,8 @@ import Map from '../../components/map/map';
 import { Offer } from '../../types/offer';
 import { ReviewType } from '../../types/reviewType';
 import { Location } from '../../types/offer';
+import {fetchActiveRoom} from '../../store/api-actions';
+import {State} from '../../types/state';
 
 type HotelProps = {
   offers: Offer[],
@@ -15,12 +18,17 @@ type HotelProps = {
   nearPlaces: Location[],
 }
 
+const currentOfferSelector = (state: State) => state.currentOffer;
+
 function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
   const params = useParams();
   const {id} = params;
   const zoom = 13;
+  store.dispatch(fetchActiveRoom(id));
   const city = useAppSelector((state) => state.city);
-  const currentOffer = offers.find((item) => item.id === Number(id ? id.replace(/[^0-9]/g, '') : ''));
+  const currentOffer = useAppSelector(currentOfferSelector);
+  // const currentOffer = store.dispatch(fetchActiveRoom(id));
+  // const currentOffer = offers.find((item) => item.id === Number(id ? id.replace(/[^0-9]/g, '') : ''));
   const selectedLocation = useAppSelector((state) => state.activeOffer?.location);
 
   return (

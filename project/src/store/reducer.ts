@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { changeCurrentCity, changeOffers, changeFilter, loadOffers, setDataLoadedStatus, getActiveOfferId, requireAuthorization } from './action';
+import { changeCurrentCity, changeOffers, changeFilter, loadOffers, setDataLoadedStatus, getActiveOfferId, requireAuthorization, getCurrentOffer } from './action';
 import { Offer } from '../types/offer';
 import { City } from '../types/city';
 import { AuthorizationStatus } from '../const';
@@ -12,6 +12,7 @@ type InitialState = {
   loaded: boolean,
   activeOffer: Offer | undefined,
   authorizationStatus: AuthorizationStatus,
+  currentOffer: Offer | undefined,
 };
 
 const initialState: InitialState = {
@@ -20,7 +21,8 @@ const initialState: InitialState = {
   currentFilter: 'Popular',
   loaded: false,
   activeOffer: undefined,
-  authorizationStatus: AuthorizationStatus.Unknown
+  authorizationStatus: AuthorizationStatus.Unknown,
+  currentOffer: undefined,
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -46,6 +48,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(requireAuthorization, (state, action) => {
       state.authorizationStatus = action.payload;
+    })
+    .addCase(getCurrentOffer, (state, action) => {
+      state.currentOffer = action.payload;
     });
 });
 

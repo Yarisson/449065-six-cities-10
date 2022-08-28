@@ -13,7 +13,8 @@ export enum Action {
   CurrentHotel = 'CURRENT_HOTEL',
   GetActiveOfferId = 'GET_ACTIVE_OFFER_ID',
   RequireAuthorization = 'REQUIRE_AUTHORIZATION',
-  RedirectToRoute = 'REDIRECT_TO_ROUTE'
+  RedirectToRoute = 'REDIRECT_TO_ROUTE',
+  GetCurrentOffer = 'GET_CURRENT_OFFER'
 }
 
 export const changeCurrentCity = createAction(Action.ChangeCurrentCity, (city: City) => ({
@@ -39,4 +40,7 @@ export const requireAuthorization = createAction(Action.RequireAuthorization, (s
 }));
 export const redirectToRoute = createAction(Action.RedirectToRoute, (route: AppRoute) => ({
   payload: route,
+}));
+export const getCurrentOffer = createAction(Action.GetCurrentOffer, (offer: Offer) => ({
+  payload: offer,
 }));
