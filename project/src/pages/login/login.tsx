@@ -1,5 +1,5 @@
 import { useAppSelector } from '../../hooks';
-import {useRef, FormEvent} from 'react';
+import {useState, useRef, FormEvent} from 'react';
 import {useNavigate} from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {useAppDispatch} from '../../hooks';
@@ -13,25 +13,46 @@ const citySelector = (state: State) => state.city;
 
 function Login(): JSX.Element {
   const city = useAppSelector(citySelector);
-  const loginRef = useRef<HTMLInputElement | null>(null);
-  const passwordRef = useRef<HTMLInputElement | null>(null);
+  // const loginRef = useRef<HTMLInputElement | null>(null);
+  // const passwordRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
+
+  const [login, setLogin] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+
+  const handleChangeLogin(evt: FormEvent<HTMLInputElement>) => {
+    setLogin((evt.target as HTMLInputElement).value);
+  }
+
+  const handleChangePassword(evt: FormEvent<HTMLInputElement>) => {
+    setPassword((evt.target as HTMLInputElement).value);
+  }
+
+  const handleSubmit(evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    if (login !== null && password !== null) {
+      onSubmit({
+        login: login,
+        password: password,
+      });
+    }
+  }
 
   const dispatch = useAppDispatch();
   const onSubmit = (authData: AuthData) => {
     dispatch(loginAction(authData));
   };
 
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
+  // const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  //   evt.preventDefault();
 
-    if (loginRef.current !== null && passwordRef.current !== null) {
-      onSubmit({
-        login: loginRef.current.value,
-        password: passwordRef.current.value,
-      });
-    }
-  };
+  //   if (loginRef.current !== null && passwordRef.current !== null) {
+  //     onSubmit({
+  //       login: loginRef.current.value,
+  //       password: passwordRef.current.value,
+  //     });
+  //   }
+  // };
 
   return (
     <div className="page page--gray page--login">
@@ -44,7 +65,9 @@ function Login(): JSX.Element {
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
                 <input
-                  ref={loginRef}
+                  // ref={loginRef}
+                  value={password}
+                  onChange={handleChangePassword}
                   className="login__input form__input"
                   type="email"
                   name="email"
@@ -55,7 +78,9 @@ function Login(): JSX.Element {
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
                 <input
-                  ref={passwordRef}
+                  // ref={passwordRef}
+                  value={login}
+                  onChange={handleChangeLogin}
                   className="login__input form__input"
                   type="password"
                   name="password"
