@@ -26,11 +26,24 @@ export type Places = Place[]
 
 export enum APIRoute {
   Offers = '/hotels',
-  Hotel = '/hotels/{hotelId}',
+  Hotel = '/hotels',
   Nearby = '/hotels/{hotelId}/nearby',
   Favorite = '/favorite',
   FavoriteChange = '/favorite/{hotelId}/{status}',
   Comments = '/comments',
   Login = '/login',
   Logout = '/logout'
+}
+
+export enum RequestStatus {
+  NotStarted,
+  Loading,
+  Success,
+  Error,
+}
+
+export enum authorizationStatus {
+  Auth,
+  NoAuth,
+  Unknown
 }

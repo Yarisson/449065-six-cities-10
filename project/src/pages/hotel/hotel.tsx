@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
+import { useAppSelector, useAppDispatch } from '../../hooks';
 import { store } from '../../store';
+import { useEffect } from 'react';
 import FormComment from '../../components/formComment/formComment';
 import Header from '../../components/header/header';
 import PlaceList from '../../components/placeList/placeList';
@@ -29,6 +30,10 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
   const currentOffer = useAppSelector(currentOfferSelector);
   // const currentOffer = store.dispatch(fetchActiveRoom(id));
   // const currentOffer = offers.find((item) => item.id === Number(id ? id.replace(/[^0-9]/g, '') : ''));
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchActiveRoom(id));
+  }, [id, dispatch]);
   const selectedLocation = useAppSelector((state) => state.activeOffer?.location);
 
   return (

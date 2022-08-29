@@ -72,7 +72,7 @@ export const fetchActiveRoom = createAsyncThunk<Offer, string | undefined, {
 }>(
   'offers/fetchActiveHotel',
   async (hotelId, {dispatch, extra: api}) => {
-    const {data} = await api.get<Offer>(`${APIRoute.Hotel}/${hotelId}`);
+    const {data} = await api.get<Offer>(`https://10.react.pages.academy/six-cities/hotels/${hotelId}`);
     dispatch(getCurrentOffer(data));
     return data;
   },
