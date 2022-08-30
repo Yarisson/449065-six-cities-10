@@ -1,8 +1,12 @@
 export interface ReviewType {
-  id: number,
-  img: string,
-  name: string,
-  text: string,
   date: string,
+  id: number,
+  comment: string,
   rating: number,
+  user: {
+    avatarUrl: string,
+    id: number,
+    isPro: boolean,
+    name: string
+  }
 }

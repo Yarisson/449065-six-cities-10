@@ -1,5 +1,5 @@
 import { useAppSelector } from '../../hooks';
-import {useState, useRef, FormEvent} from 'react';
+import {useState, FormEvent} from 'react';
 import {useNavigate} from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {useAppDispatch} from '../../hooks';
@@ -20,15 +20,15 @@ function Login(): JSX.Element {
   const [login, setLogin] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const handleChangeLogin(evt: FormEvent<HTMLInputElement>) => {
+  const handleChangeLogin = (evt: FormEvent<HTMLInputElement>) => {
     setLogin((evt.target as HTMLInputElement).value);
-  }
+  };
 
-  const handleChangePassword(evt: FormEvent<HTMLInputElement>) => {
+  const handleChangePassword = (evt: FormEvent<HTMLInputElement>) => {
     setPassword((evt.target as HTMLInputElement).value);
-  }
+  };
 
-  const handleSubmit(evt: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     if (login !== null && password !== null) {
       onSubmit({
@@ -36,7 +36,7 @@ function Login(): JSX.Element {
         password: password,
       });
     }
-  }
+  };
 
   const dispatch = useAppDispatch();
   const onSubmit = (authData: AuthData) => {

@@ -1,40 +1,29 @@
 import { useParams } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../hooks';
-import { store } from '../../store';
-import { useEffect } from 'react';
+import { useAppSelector } from '../../hooks';
 import FormComment from '../../components/formComment/formComment';
 import Header from '../../components/header/header';
 import PlaceList from '../../components/placeList/placeList';
 import ReviewList from '../../components/reviewList/reviewList';
 import Map from '../../components/map/map';
-import { Offer } from '../../types/offer';
-import { ReviewType } from '../../types/reviewType';
-import { Location } from '../../types/offer';
-import {fetchActiveRoom} from '../../store/api-actions';
-import {State} from '../../types/state';
+import { useFetchHotel } from '../../hooks/useFetchHotel';
+import { useFetchNearby } from '../../hooks/useFetchNearby';
+import { useFetchComments } from '../../hooks/useFetchComments';
 
-type HotelProps = {
-  offers: Offer[],
-  reviews: ReviewType[],
-  nearPlaces: Location[],
-}
+const INITIAL_ZOOM = 13;
 
-const currentOfferSelector = (state: State) => state.currentOffer;
-
-function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
+function Hotel(): JSX.Element {
   const params = useParams();
   const {id} = params;
-  const zoom = 13;
-  store.dispatch(fetchActiveRoom(id));
+
   const city = useAppSelector((state) => state.city);
-  const currentOffer = useAppSelector(currentOfferSelector);
-  // const currentOffer = store.dispatch(fetchActiveRoom(id));
-  // const currentOffer = offers.find((item) => item.id === Number(id ? id.replace(/[^0-9]/g, '') : ''));
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchActiveRoom(id));
-  }, [id, dispatch]);
+  const [currentOffer] = useFetchHotel(id);
+  const [nearbyOffers] = useFetchNearby(id);
+  const [reviews] = useFetchComments(id);
   const selectedLocation = useAppSelector((state) => state.activeOffer?.location);
+
+  const nearPlaces = nearbyOffers?.map((offer) => offer.location);
+  // eslint-disable-next-line no-console
+  console.log(reviews);
 
   return (
     <div className="page">
@@ -132,14 +121,14 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
               </div>
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">
-                  Reviews &middot; <span className="reviews__amount">{reviews.length}</span>
+                  Reviews &middot; <span className="reviews__amount">{reviews?.length}</span>
                 </h2>
                 <ReviewList reviews={reviews} />
                 <FormComment/>
               </section>
             </div>
           </div>
-          <Map className="property__map map" zoom={zoom} center={city.location} points={nearPlaces} selectedLocation={selectedLocation} />
+          <Map className="property__map map" zoom={INITIAL_ZOOM} center={city.location} points={nearPlaces} selectedLocation={selectedLocation} />
         </section>
         <div className="container">
           <section className="near-places places">
@@ -147,7 +136,7 @@ function Hotel({offers, reviews, nearPlaces}: HotelProps): JSX.Element {
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              <PlaceList offers={offers} />
+              <PlaceList offers={nearbyOffers} />
             </div>
           </section>
         </div>

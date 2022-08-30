@@ -2,29 +2,28 @@ import {useEffect, useState, useCallback} from 'react';
 import {APIRoute} from '../const';
 import { RequestStatus } from '../const';
 import { api } from '../services/api';
-import { Offer } from '../types/offer';
+import { ReviewType } from '../types/reviewType';
 
-export const useFetchHotel = (id: string | undefined) => {
-  const [hotel, setHotel] = useState<Offer>();
+export const useFetchComments = (id: string | undefined) => {
+  const [comments, setComments] = useState<ReviewType[] | undefined>();
   const [status, setStatus] = useState(RequestStatus.NotStarted);
 
   const fetch = useCallback(async () => {
     if (id) {
       setStatus(RequestStatus.Loading);
-
-      const {data} = await api.get(`${APIRoute.Hotel}/${id}`);
+      const {data} = await api.get(`${APIRoute.Comments}/${id}`);
       if (data) {
-        setHotel(data);
+        setComments(data);
         setStatus(RequestStatus.Success);
       } else {
         setStatus(RequestStatus.Error);
       }
     }
-  }, [setHotel, setStatus, id]);
+  }, [setComments, setStatus, id]);
 
   useEffect(() => {
     fetch();
   }, [fetch]);
 
-  return [hotel, status] as const;
+  return [comments, status] as const;
 };

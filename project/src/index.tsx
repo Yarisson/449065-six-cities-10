@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './components/app/app';
 import { store } from './store';
-import reviews from './mocks/reviews';
-import nearPlaces from './mocks/nearPlaces';
 import {fetchOffersAction} from './store/api-actions';
 
 store.dispatch(fetchOffersAction());
@@ -16,7 +14,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App nearPlaces={nearPlaces} reviews={reviews} />
+      <App />
     </Provider>
   </React.StrictMode>,
 );
