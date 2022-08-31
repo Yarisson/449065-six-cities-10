@@ -1,13 +1,15 @@
 import {AxiosInstance} from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state.js';
-import {Offer} from '../types/offer';
+import { generatePath } from 'react-router-dom';
+import {Offer, OfferStatus} from '../types/offer';
 import {loadOffers, setDataLoadedStatus, requireAuthorization, redirectToRoute, getCurrentOffer} from './action';
 import { APIRoute } from '../const';
 import { AuthData } from '../types/authData.js';
 import { UserData } from '../types/userData.js';
 import { saveToken, dropToken } from '../services/token';
 import { AuthorizationStatus, AppRoute } from '../const';
+import { addComment } from '../types/comment.js';
 
 export const fetchOffersAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch,
@@ -87,4 +89,32 @@ export const fetchNearRooms = createAsyncThunk<Offer[], string | undefined, {
     const {data} = await api.get<Offer[]>(`${APIRoute.Hotel}/${hotelId}/nearby`);
     return data;
   },
+);
+
+export const addCommentPost = createAsyncThunk<addComment, addComment, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'data/sendReview',
+  async ({hotelId, comment, rating}, {extra: api}) => {
+    const {data} = await api.post<addComment>(generatePath(`${APIRoute.Comments}/${hotelId}`), {comment, rating});
+    return data;
+  },
+);
+
+export const changeFavoriteStatusAction = createAsyncThunk<Offer, OfferStatus,
+ {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'data/changeFavoriteStatus',
+  async({id, status}, {extra: api})=>{
+    const {data} = await api.post<Offer>(generatePath(APIRoute.FavoriteChange,{
+      id: id.toString(),
+      status: Number(status).toString(),
+    }));
+    return data;
+  }
 );

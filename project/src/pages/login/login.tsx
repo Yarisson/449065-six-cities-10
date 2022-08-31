@@ -16,6 +16,7 @@ function Login(): JSX.Element {
   // const loginRef = useRef<HTMLInputElement | null>(null);
   // const passwordRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [login, setLogin] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -28,6 +29,10 @@ function Login(): JSX.Element {
     setPassword((evt.target as HTMLInputElement).value);
   };
 
+  const onSubmit = (authData: AuthData) => {
+    dispatch(loginAction(authData));
+  };
+
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     if (login !== null && password !== null) {
@@ -36,11 +41,6 @@ function Login(): JSX.Element {
         password: password,
       });
     }
-  };
-
-  const dispatch = useAppDispatch();
-  const onSubmit = (authData: AuthData) => {
-    dispatch(loginAction(authData));
   };
 
   // const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {

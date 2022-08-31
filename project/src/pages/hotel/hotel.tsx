@@ -1,5 +1,6 @@
-import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
+import { useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../hooks';
 import FormComment from '../../components/formComment/formComment';
 import Header from '../../components/header/header';
 import PlaceList from '../../components/placeList/placeList';
@@ -8,12 +9,16 @@ import Map from '../../components/map/map';
 import { useFetchHotel } from '../../hooks/useFetchHotel';
 import { useFetchNearby } from '../../hooks/useFetchNearby';
 import { useFetchComments } from '../../hooks/useFetchComments';
+import { changeFavoriteStatusAction } from '../../store/api-actions';
+import { AppRoute, AuthorizationStatus } from '../../const';
 
 const INITIAL_ZOOM = 13;
 
 function Hotel(): JSX.Element {
   const params = useParams();
   const {id} = params;
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const city = useAppSelector((state) => state.city);
   const [currentOffer] = useFetchHotel(id);
@@ -22,8 +27,20 @@ function Hotel(): JSX.Element {
   const selectedLocation = useAppSelector((state) => state.activeOffer?.location);
 
   const nearPlaces = nearbyOffers?.map((offer) => offer.location);
-  // eslint-disable-next-line no-console
-  console.log(reviews);
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+
+  const handleFavoriteButtonClick = useCallback(() =>{
+    if ( authorizationStatus !== AuthorizationStatus.Auth) {
+      navigate(AppRoute.Login);
+    }
+    else {
+      dispatch(changeFavoriteStatusAction({
+        id: Number(id),
+        status: !currentOffer?.isFavorite,
+      }));
+
+    }
+  }, [authorizationStatus, dispatch, id, currentOffer?.isFavorite, navigate]);
 
   return (
     <div className="page">
@@ -56,6 +73,7 @@ function Hotel(): JSX.Element {
                 <button
                   className="property__bookmark-button button"
                   type="button"
+                  onClick={handleFavoriteButtonClick}
                 >
                   <svg
                     className="property__bookmark-icon"
@@ -124,7 +142,7 @@ function Hotel(): JSX.Element {
                   Reviews &middot; <span className="reviews__amount">{reviews?.length}</span>
                 </h2>
                 <ReviewList reviews={reviews} />
-                <FormComment/>
+                {authorizationStatus === AuthorizationStatus.Auth && <FormComment />}
               </section>
             </div>
           </div>

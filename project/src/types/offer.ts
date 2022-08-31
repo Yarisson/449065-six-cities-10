@@ -38,3 +38,9 @@ export interface Offer {
   maxAdults: number,
   previewImage: string,
 }
+
+export type OfferStatus = {
+  id: number,
+  status: boolean,
+  isFavorite?: boolean,
+}
