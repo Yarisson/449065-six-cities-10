@@ -1,11 +1,46 @@
-import { useState, ChangeEvent } from 'react';
-
+import { useState, ChangeEvent, FormEvent } from 'react';
+import { useAppDispatch } from '../../hooks';
+import { addCommentPost } from '../../store/api-actions';
+import { useParams } from 'react-router-dom';
+import {addComment } from '../../types/comment';
 
 function FormComment(): JSX.Element {
-  const [review, setReview] = useState({ comment: '' });
+  const [formData, setFormData] = useState({
+    rating: '0',
+    review: '',
+  });
+  const dispatch = useAppDispatch();
+
+  const {rating, review} = formData;
+  const {id} = useParams();
+  const hotelId = id;
+
+  const onSubmit = (reviewData: addComment) => {
+    dispatch(addCommentPost(reviewData));
+    setFormData({...formData, review: '', rating: '0'});
+  };
+
+  const fieldChangeHandle = (event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> ) : void => {
+    const {target} = event;
+    const {value, name} = target;
+    setFormData({...formData, [name]: value });
+  };
+
+  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+
+    if ( review !== '' && rating !== '0') {
+      onSubmit({
+        hotelId,
+        rating: Number(rating),
+        comment: review,
+        date: new Date().toISOString(),
+      });
+    }
+  };
 
   return (
-    <form className="reviews__form form" action="#" method="post">
+    <form className="reviews__form form" action="#" method="post" onSubmit ={handleSubmit}>
       <label
         className="reviews__label form__label"
         htmlFor="review"
@@ -18,6 +53,7 @@ function FormComment(): JSX.Element {
           name="rating"
           value="5"
           id="5-stars"
+          onChange = {fieldChangeHandle}
           type="radio"
         />
         <label
@@ -35,6 +71,7 @@ function FormComment(): JSX.Element {
           name="rating"
           value="4"
           id="4-stars"
+          onChange = {fieldChangeHandle}
           type="radio"
         />
         <label
@@ -52,6 +89,7 @@ function FormComment(): JSX.Element {
           name="rating"
           value="3"
           id="3-stars"
+          onChange = {fieldChangeHandle}
           type="radio"
         />
         <label
@@ -69,6 +107,7 @@ function FormComment(): JSX.Element {
           name="rating"
           value="2"
           id="2-stars"
+          onChange = {fieldChangeHandle}
           type="radio"
         />
         <label
@@ -85,6 +124,7 @@ function FormComment(): JSX.Element {
           name="rating"
           value="1"
           id="1-star"
+          onChange = {fieldChangeHandle}
           type="radio"
         />
         <label
@@ -102,8 +142,8 @@ function FormComment(): JSX.Element {
         id="review"
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
-        value={review.comment}
-        onChange={(evt: ChangeEvent<HTMLTextAreaElement>) => setReview({ ...review, comment: evt.target.value })}
+        value = {formData.review}
+        onChange = {fieldChangeHandle}
       >
       </textarea>
       <div className="reviews__button-wrapper">

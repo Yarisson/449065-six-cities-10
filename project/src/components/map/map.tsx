@@ -8,7 +8,7 @@ import useMap from '../../hooks/useMap';
 type MapProps = {
   zoom: number;
   center: Location;
-  points: Location[];
+  points: Location[] | undefined;
   selectedLocation: Location | undefined;
   className?: string;
 };
@@ -36,7 +36,7 @@ function Map({points, zoom, center, className, selectedLocation}: MapProps): JSX
 
     const layerGroup = new LayerGroup();
 
-    points.forEach((point) => {
+    points?.forEach((point) => {
       const marker = new Marker({
         lat: point.latitude,
         lng: point.longitude,
