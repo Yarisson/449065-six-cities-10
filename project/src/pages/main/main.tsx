@@ -5,7 +5,7 @@ import Map from '../../components/map/map';
 import CityList from '../../components/cityList/cityList';
 import SortList from '../../components/sortList/sortList';
 import { useState } from 'react';
-import cities from '../../mocks/cities';
+import cities from '../../const/cities';
 import FilterType from '../../mocks/filterTypes';
 import { State } from '../../types/state';
 

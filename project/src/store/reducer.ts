@@ -3,7 +3,7 @@ import { changeCurrentCity, changeOffers, changeFilter, loadOffers, setDataLoade
 import { Offer } from '../types/offer';
 import { City } from '../types/city';
 import { AuthorizationStatus } from '../const';
-import city from '../mocks/city';
+import city from '../const/cities';
 
 type InitialState = {
   city: City,
@@ -16,7 +16,7 @@ type InitialState = {
 };
 
 const initialState: InitialState = {
-  city: city,
+  city: city[3],
   offers: [],
   currentFilter: 'Popular',
   loaded: false,
