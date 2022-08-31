@@ -9,7 +9,7 @@ function Main(): JSX.Element {
 
   return (
     <section>
-      {currentOffers.length < 0 ? <MainFill/> : <MainEmpty city={city}/>}
+      {currentOffers.length > 0 ? <MainFill/> : <MainEmpty city={city}/>}
     </section>
   );
 }
